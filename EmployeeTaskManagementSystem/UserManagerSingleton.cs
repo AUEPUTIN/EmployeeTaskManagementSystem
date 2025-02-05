@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,7 +8,7 @@ using System.Xml.Linq;
 
 namespace EmployeeTaskManagementSystem
 {
-    internal class UserManagerSingleton
+    internal class UserManagerSingleton : IEnumerator,IEnumerable
     {
         public User[] Users { get; set; }
         int size;
@@ -35,7 +36,7 @@ namespace EmployeeTaskManagementSystem
         {
             get { return Users[position]; }
         }
-        public IEnumerator<User> GetEnumerator()
+        public IEnumerator GetEnumerator()
         {
             for (int i = 0; i < size; i++)
             {

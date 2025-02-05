@@ -28,11 +28,11 @@ namespace EmployeeTaskManagementSystem
                 case 0:
                     return;
                 case 1:
-                    AddTask();
+                    InitializeTask();
                     Console.ReadLine();
                     break;
                 case 2:
-                    AddUser();
+                    InitializeUser();
                     Console.ReadLine();
                     break;
                 case 3:
@@ -49,10 +49,11 @@ namespace EmployeeTaskManagementSystem
                     break;
                 case 6:
                     TaskManagerSingleton.GetInstance().GetActiveTasks();
+                    
                     Console.ReadLine();
                     break;
                 case 7:
-                    TaskManagerSingleton.GetInstance().GetTask(GetString("title of task")).ChangeStatus(GetTaskValue<Enums.TaskStatus>());
+                    TaskManagerSingleton.GetInstance().GetTask(GetString("title of task")).ChangeStatus(GetTaskValue<Enums.TaskStatus>("Choose task status"));
                     Console.ReadLine();
                     break;
                 case 8:
@@ -86,12 +87,12 @@ namespace EmployeeTaskManagementSystem
                 "\n9.Show all users");
 
         }
-        public static void AddTask()
+        public static void InitializeTask()
         {
-            TaskManagerSingleton.GetInstance().AddTask(new Task(GetId("Id"), GetString("Title"), GetTaskValue<Enums.TaskType>(), GetTaskValue<Enums.TaskPriority>(), GetTaskValue<Enums.TaskStatus>(), GetTaskAttributes()));
+            TaskManagerSingleton.GetInstance().AddTask(new Task(GetId("Id"), GetString("Title"), GetTaskValue<Enums.TaskType>("Choose task type"), GetTaskValue<Enums.TaskPriority>("Choose task priority"), GetTaskValue<Enums.TaskStatus>("Choose task status"), GetTaskAttributes()));
         }
 
-        public static void AddUser()
+        public static void InitializeUser()
         {
             UserManagerSingleton.GetInstance().AddUser(GetString("Name"), GetString("Role"));
         }
@@ -112,12 +113,12 @@ namespace EmployeeTaskManagementSystem
         {
             return InputString(paramName);
         }
-        public static T GetTaskValue<T>() where T : Enum
+        public static T GetTaskValue<T>(string description) where T : Enum
         {
 
             ShowEnumValues<T>();
 
-            int choice = InputEnumValue(Enum.GetValues(typeof(T)).Length);
+            int choice = InputEnumValue(Enum.GetValues(typeof(T)).Length,description);
 
             return Enum.GetValues(typeof(T)).Cast<T>().ToArray()[choice - 1];
         }
@@ -156,6 +157,7 @@ namespace EmployeeTaskManagementSystem
 
         public static void ShowEnumValues<T>() where T : Enum
         {
+            Console.Clear();
             var values = Enum.GetValues(typeof(T)).Cast<T>().ToArray();
 
             for (int i = 0; i < values.Length; i++)
@@ -163,10 +165,10 @@ namespace EmployeeTaskManagementSystem
                 Console.WriteLine($"{i + 1}. {values[i]}");
             }
         }
-        public static int InputEnumValue(int maxLength)
+        public static int InputEnumValue(int maxLength,string description)
         {
             int choice;
-
+            Console.WriteLine(description);
             Console.WriteLine("Enter the corresponding number:");
 
             while (!int.TryParse(Console.ReadLine(), out choice) || choice < 1 || choice > maxLength)

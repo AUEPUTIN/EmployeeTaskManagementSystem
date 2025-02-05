@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EmployeeTaskManagementSystem
 {
-    internal class TaskManagerSingleton : TaskManager
+    internal class TaskManagerSingleton : TaskManager,IEnumerable,IEnumerator
     {
         public Task[] Tasks
         {
